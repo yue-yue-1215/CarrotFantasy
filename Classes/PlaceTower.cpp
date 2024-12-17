@@ -1,17 +1,15 @@
-#include"CTower.h"
-#include"Tower_kind.h"
+#include"Tower.h"
+#include"Towertype.h"
 #include<vector>
 #include"cocos2d.h"
 #include<iostream>
 using namespace std;
 
-vector<CTower*> TowerExist;
+vector<Tower*> TowerExist;
 
-void placeTower(vector<CTower*>& TowerExist, int towerType, int x, int y)
+void placeTower(vector<Tower*>& TowerExist, int towerType, int x, int y)
 {
-	CTower* newTower = nullptr;
-
-	// 根据 towerType 创建不同类型的防御塔
+	Tower* newTower = nullptr;
 	switch (towerType) {
 	case 0:
 		newTower = new Tower0();
@@ -29,12 +27,9 @@ void placeTower(vector<CTower*>& TowerExist, int towerType, int x, int y)
 		newTower = new Tower3();
 		newTower->initial(3, 1, tower3_upgrade_coins, tower3_attack, tower3_attack_range, 0);
 		break;
-
 	default:
-		// 不支持的防御塔类型
 		break;
 	}
-
 	if (newTower)
 	{
 		newTower->setPosition(x, y);
@@ -43,6 +38,5 @@ void placeTower(vector<CTower*>& TowerExist, int towerType, int x, int y)
 		cout << newTower->getDamage();
 		cout << newTower->getType();
 	}
-	
 }
 

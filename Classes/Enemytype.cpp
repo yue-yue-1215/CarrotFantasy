@@ -1,4 +1,4 @@
-#include "Enemy_kind.h"
+#include "Enemytype.h"
 
 Enemy0::Enemy0() {
 	initial(0, 1500, 0.3f, 100, 0, 0);

@@ -1,19 +1,16 @@
-#ifndef __GAME_END__H__
-#define __GAME_END__H__
-
+#ifndef __GAME_PAUSE__H__
+#define __GAME_PAUSE__H__
 #include "cocos2d.h"
-
 USING_NS_CC;
 
-class GameEnd : public cocos2d::Layer
+class Pause : public cocos2d::Layer
 {
 public:
 	virtual bool init();
 	static cocos2d::Scene* scene(RenderTexture* sqr);
-	CREATE_FUNC(GameEnd);
-	// 开始下一关卡
+	CREATE_FUNC(Pause);
 	void ContinueGame(Ref *pSender);
-	// 返回菜单
+	void RestartGame(Ref *pSender);
 	void ReturnMenuGame(Ref *pSender);
 };
 #endif 

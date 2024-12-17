@@ -1,15 +1,14 @@
 ﻿#include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
-#include "GameScene.h"
-#include "Gamepause.h"
+#include "Level.h"
+#include "Pause.h"
 #include "PlaceTower.h"
-#include "GameEnd.h"
-#include "Tower_kind.h"
-#include "CEnemy.h"
-#include "Enemy_kind.h"
-#include "Enemy_kind.h"
-#include "GenerateEnemy.h"
-#include "GameDefault.h"
+#include "End.h"
+#include "Towertype.h"
+#include "Enemy.h"
+#include "Enemytype.h"
+#include "PlaceEnemy.h"
+#include "Set.h"
 #include <algorithm>
 
 USING_NS_CC;
@@ -83,10 +82,10 @@ bool Game_two::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	// 加入背景图片
-	auto map_two = Sprite::create("GameBackground_two.png");
+	auto map_two = Sprite::create("Background_two.png");
 	if (map_two == nullptr)
 	{
-		problemLoading("'GameBackground_two.png'");
+		problemLoading("'Background_two.png'");
 	}
 	else
 	{
@@ -132,18 +131,18 @@ bool Game_two::init()
 	//萝卜相关
 	{
 		// 添加 "carrot" 图片
-		auto carrot_pic = Button::create("carrot.png", "carrot.png");
+		auto carrot_pic = Button::create("Carrot.png", "Carrot.png");
 		carrot_pic->setPosition(Vec2(95, 248));
 		this->addChild(carrot_pic, 1);
 
 		// 升级按钮
-		auto levelupcarrotbutton = Button::create("levelup.png");
+		auto levelupcarrotbutton = Button::create("Upgrade.png");
 		levelupcarrotbutton->setPosition(Vec2(106, 224));
 		this->addChild(levelupcarrotbutton, 2, "carrot_u");
 		levelupcarrotbutton->setVisible(false);
 
 		// 退出按钮
-		auto returncarrotbutton = Button::create("exit.png");
+		auto returncarrotbutton = Button::create("Exit.png");
 		returncarrotbutton->setPosition(Vec2(90, 225));
 		this->addChild(returncarrotbutton, 2, "carrot_r");
 		returncarrotbutton->setVisible(false);
@@ -259,7 +258,7 @@ bool Game_two::init()
 		this->addChild(CarrotHealthBack, 1);
 
 		// 添加萝卜血条
-		ProgressTimer* healthBar = ProgressTimer::create(Sprite::create("HealthBar.png"));
+		ProgressTimer* healthBar = ProgressTimer::create(Sprite::create("EnemyHealthBar.png"));
 		healthBar->setType(ProgressTimer::Type::BAR);
 		healthBar->setMidpoint(Vec2(0, 0.5));
 		healthBar->setBarChangeRate(Vec2(1, 0));
@@ -270,7 +269,7 @@ bool Game_two::init()
 	}
 
 	// 添加出怪牌图片
-	auto GuideBoard = Sprite::create("GuideBoard.png");
+	auto GuideBoard = Sprite::create("EnemyBorn.png");
 	if (GuideBoard)
 	{
 		GuideBoard->setPosition(Vec2(424, 75)); //出怪牌位置
@@ -278,7 +277,7 @@ bool Game_two::init()
 	}
 	else
 	{
-		problemLoading("'GuideBoard.png'");
+		problemLoading("'EnemyBorn.png'");
 	}
 
 	// 添加文字
@@ -297,21 +296,21 @@ bool Game_two::init()
 	}
 
 	//显示侧边的防御塔0
-	createTower0("tower_zero.png", "tower_back.png", tower0_upgrade_coins[0], 230, 0);
+	createTower0("Tower_zero.png", "Tower_back.png", tower0_upgrade_coins[0], 230, 0);
 
 	//显示侧边的防御塔1
-	createTower0("tower_one.png", "tower_back.png", tower1_upgrade_coins[0], 185, 1);
+	createTower0("Tower_one.png", "Tower_back.png", tower1_upgrade_coins[0], 185, 1);
 
 	//显示侧边的防御塔2
-	createTower0("tower_two.png", "tower_back.png", tower2_upgrade_coins[0], 140, 2);
+	createTower0("Tower_two.png", "Tower_back.png", tower2_upgrade_coins[0], 140, 2);
 
 	//显示侧边的防御塔3
-	createTower0("tower_three.png", "tower_back.png", tower3_upgrade_coins[0], 95, 3);
+	createTower0("Tower_three.png", "Tower_back.png", tower3_upgrade_coins[0], 95, 3);
 
 	// 显示侧边的灰色防御塔
 	{
-		tower_zero0 = Sprite::create("tower_zero0.png");
-		tower_back0 = Sprite::create("tower_back0.png");
+		tower_zero0 = Sprite::create("Tower_zero0.png");
+		tower_back0 = Sprite::create("Tower_back0.png");
 		tower_back0->setPosition(Vec2(42, 230));
 		tower_zero0->setPosition(Vec2(42, 230));  // 侧边防御塔位置
 		tower_back0->setVisible(false);
@@ -324,8 +323,8 @@ bool Game_two::init()
 		buildcoins0->setColor(Color3B(0, 0, 0));
 		this->addChild(buildcoins0, 1);
 
-		tower_one0 = Sprite::create("tower_one0.png");
-		tower_back1 = Sprite::create("tower_back0.png");
+		tower_one0 = Sprite::create("Tower_one0.png");
+		tower_back1 = Sprite::create("Tower_back0.png");
 		tower_back1->setPosition(Vec2(42, 185));
 		tower_one0->setPosition(Vec2(42, 185));  // 侧边防御塔位置
 		tower_back1->setVisible(false);
@@ -338,8 +337,8 @@ bool Game_two::init()
 		buildcoins1->setColor(Color3B(0, 0, 0));
 		this->addChild(buildcoins1, 1);
 
-		tower_two0 = Sprite::create("tower_two0.png");
-		tower_back2 = Sprite::create("tower_back0.png");
+		tower_two0 = Sprite::create("Tower_two0.png");
+		tower_back2 = Sprite::create("Tower_back0.png");
 		tower_back2->setPosition(Vec2(42, 140));
 		tower_two0->setPosition(Vec2(42, 140));  // 侧边防御塔位置
 		tower_back2->setVisible(false);
@@ -352,8 +351,8 @@ bool Game_two::init()
 		buildcoins2->setColor(Color3B(0, 0, 0));
 		this->addChild(buildcoins2, 1);
 
-		tower_three0 = Sprite::create("tower_three0.png");
-		tower_back3 = Sprite::create("tower_back0.png");
+		tower_three0 = Sprite::create("Tower_three0.png");
+		tower_back3 = Sprite::create("Tower_back0.png");
 		tower_back3->setPosition(Vec2(42, 95));
 		tower_three0->setPosition(Vec2(42, 95));  // 侧边防御塔位置
 		tower_back3->setVisible(false);
@@ -368,32 +367,32 @@ bool Game_two::init()
 	}
 
 	// 初始化金币不足的标签
-	insufficientGoldLabel = Label::createWithTTF("not enough gold coins!", "fonts/Marker Felt.ttf", 14);
-	insufficientGoldLabel->setColor(Color3B(255, 0, 0));  // 红色
-	insufficientGoldLabel->setVisible(false);  // 初始时设置为不可见
-	insufficientGoldLabel->setPosition(Vec2(90, 60));//设置位置
+	insufficientGoldLabel = Label::createWithTTF("Not enough gold coins!", "fonts/Marker Felt.ttf", 14);
+	insufficientGoldLabel->setColor(Color3B(255, 0, 0)); 
+	insufficientGoldLabel->setVisible(false);  
+	insufficientGoldLabel->setPosition(Vec2(90, 60));
 	this->addChild(insufficientGoldLabel, 1);
 
 	// 初始化放置位置错误的标签
-	insufficientPlaceLabel = Label::createWithTTF("wrong place!", "fonts/Marker Felt.ttf", 14);
-	insufficientPlaceLabel->setColor(Color3B(255, 0, 0));  // 红色
-	insufficientPlaceLabel->setVisible(false);  // 初始时设置为不可见
-	insufficientPlaceLabel->setPosition(Vec2(90, 60));//设置位置
+	insufficientPlaceLabel = Label::createWithTTF("Wrong place!", "fonts/Marker Felt.ttf", 14);
+	insufficientPlaceLabel->setColor(Color3B(255, 0, 0));  
+	insufficientPlaceLabel->setVisible(false); 
+	insufficientPlaceLabel->setPosition(Vec2(90, 60));
 	this->addChild(insufficientPlaceLabel, 1);
 
 	// 初始化等级已满的标签
-	insufficientLevelLabel = Label::createWithTTF("reach highest level!", "fonts/Marker Felt.ttf", 14);
-	insufficientLevelLabel->setColor(Color3B(255, 0, 0));  // 红色
-	insufficientLevelLabel->setVisible(false);  // 初始时设置为不可见
-	insufficientLevelLabel->setPosition(Vec2(90, 60));//设置位置
+	insufficientLevelLabel = Label::createWithTTF("Reach highest level!", "fonts/Marker Felt.ttf", 14);
+	insufficientLevelLabel->setColor(Color3B(255, 0, 0)); 
+	insufficientLevelLabel->setVisible(false); 
+	insufficientLevelLabel->setPosition(Vec2(90, 60));
 	this->addChild(insufficientLevelLabel, 1);
 
 	// 防御塔可放置位置边框
 	for (unsigned int i = 1; i <= sizeof(pairxy) / sizeof(pairxy[0]); i++) {
-		board[i] = Sprite::create("board.png");
+		board[i] = Sprite::create("Board.png");
 		if (board[i] == nullptr)
 		{
-			problemLoading("'board.png'");
+			problemLoading("'Board.png'");
 		}
 		else
 		{
@@ -454,35 +453,35 @@ bool Game_two::init()
 		case 0:
 			(*it_enemy)->enemySprite = Sprite::create("Enemy_zero2.png");
 			(*it_enemy)->enemyHealthbar_back = Sprite::create("CarrotHealthBack.png");
-			(*it_enemy)->enemyHealthbar = ProgressTimer::create(Sprite::create("HealthBar.png"));
+			(*it_enemy)->enemyHealthbar = ProgressTimer::create(Sprite::create("EnemyHealthBar.png"));
 			(*it_enemy)->dizzypic = cocos2d::Sprite::create("vertigo.png");
 			(*it_enemy)->dizzypic->setVisible(false);
 			break;
 		case 1:
 			(*it_enemy)->enemySprite = Sprite::create("Enemy_one.png");
 			(*it_enemy)->enemyHealthbar_back = Sprite::create("CarrotHealthBack.png");
-			(*it_enemy)->enemyHealthbar = ProgressTimer::create(Sprite::create("HealthBar.png"));
+			(*it_enemy)->enemyHealthbar = ProgressTimer::create(Sprite::create("EnemyHealthBar.png"));
 			(*it_enemy)->dizzypic = cocos2d::Sprite::create("vertigo.png");
 			(*it_enemy)->dizzypic->setVisible(false);
 			break;
 		case 2:
 			(*it_enemy)->enemySprite = Sprite::create("Enemy_two.png");
 			(*it_enemy)->enemyHealthbar_back = Sprite::create("CarrotHealthBack.png");
-			(*it_enemy)->enemyHealthbar = ProgressTimer::create(Sprite::create("HealthBar.png"));
+			(*it_enemy)->enemyHealthbar = ProgressTimer::create(Sprite::create("EnemyHealthBar.png"));
 			(*it_enemy)->dizzypic = cocos2d::Sprite::create("vertigo.png");
 			(*it_enemy)->dizzypic->setVisible(false);
 			break;
 		case 3:
 			(*it_enemy)->enemySprite = Sprite::create("Enemy_three.png");
 			(*it_enemy)->enemyHealthbar_back = Sprite::create("CarrotHealthBack.png");
-			(*it_enemy)->enemyHealthbar = ProgressTimer::create(Sprite::create("HealthBar.png"));
+			(*it_enemy)->enemyHealthbar = ProgressTimer::create(Sprite::create("EnemyHealthBar.png"));
 			(*it_enemy)->dizzypic = cocos2d::Sprite::create("vertigo.png");
 			(*it_enemy)->dizzypic->setVisible(false);
 			break;
 		case 4:
 			(*it_enemy)->enemySprite = Sprite::create("Enemy_four.png");
 			(*it_enemy)->enemyHealthbar_back = Sprite::create("CarrotHealthBack.png");
-			(*it_enemy)->enemyHealthbar = ProgressTimer::create(Sprite::create("HealthBar.png"));
+			(*it_enemy)->enemyHealthbar = ProgressTimer::create(Sprite::create("EnemyHealthBar.png"));
 			(*it_enemy)->dizzypic = cocos2d::Sprite::create("vertigo.png");
 			(*it_enemy)->dizzypic->setVisible(false);
 			break;
@@ -518,7 +517,7 @@ bool Game_two::init()
 
 		this->addChild((*it_enemy)->enemySprite, 1);
 		this->addChild((*it_enemy)->enemyHealthbar_back, 1);
-		this->addChild((*it_enemy)->enemyHealthbar, 2, "HealthBar.png");
+		this->addChild((*it_enemy)->enemyHealthbar, 2, "EnemyHealthBar.png");
 		this->addChild((*it_enemy)->dizzypic,3, "vertigo.png");
 	}
 
@@ -592,14 +591,11 @@ void Game_two::Enemyupdate(float dt)// 访问全体存在的怪物并且更改�
 						// 得到窗口的大小
 						auto visibleSize = Director::getInstance()->getVisibleSize();
 						RenderTexture *renderTexture = RenderTexture::create(visibleSize.width + 48, visibleSize.height);
-
-						// 遍历当前类的所有子节点信息，画入renderTexture中。
-						// 这里类似截图。
 						renderTexture->begin();
 						this->getParent()->visit();
 						renderTexture->end();
 
-						Director::getInstance()->pushScene(GameDefault::scene(renderTexture));
+						Director::getInstance()->pushScene(Default::scene(renderTexture));
 					}
 				}
 
@@ -646,16 +642,13 @@ void Game_two::Enemyupdate(float dt)// 访问全体存在的怪物并且更改�
 					// 得到窗口的大小
 					auto visibleSize = Director::getInstance()->getVisibleSize();
 					RenderTexture *renderTexture = RenderTexture::create(visibleSize.width + 48, visibleSize.height);
-
-					// 遍历当前类的所有子节点信息，画入renderTexture中。
-					// 这里类似截图。
 					renderTexture->begin();
 					this->getParent()->visit();
 					renderTexture->end();
 
 					Director::getInstance()->pushScene(GameEnd::scene(renderTexture));
 				}
-				continue;  // 继续下一次循环，不需要执行 delete 操作
+				continue; 
 			}
 			++it_enemy;
 		}
@@ -671,9 +664,9 @@ void Game_two::Game_two::carrotHealthUpdate(float Dt)
 }
 
 // 在怪物出生点生成一只怪物
-void Game_two::generateOneEnemy(vector<CEnemy*>& EnemyExist, int enemyType, double x, double y)
+void Game_two::generateOneEnemy(vector<Enemy*>& EnemyExist, int enemyType, double x, double y)
 {
-	CEnemy* newEnemy = nullptr;
+	Enemy* newEnemy = nullptr;
 
 	// 根据 enemyType 创建不同类型的防御塔
 	switch (enemyType) {
@@ -725,10 +718,10 @@ void Game_two::TowerAttack(float dt)
 {
 	for (auto tower_it = TowerExist.begin(); tower_it != TowerExist.end(); ++tower_it)
 	{
-		CTower* tower = *tower_it;
-		vector<CEnemy*> inRangeEnemies;
-		CEnemy* enemy;
-		CEnemy* target;
+		Tower* tower = *tower_it;
+		vector<Enemy*> inRangeEnemies;
+		Enemy* enemy;
+		Enemy* target;
 		for (auto enemy_it = EnemyExist.begin(); enemy_it != EnemyExist.end(); ++enemy_it)
 		{
 			enemy = *enemy_it;
@@ -907,7 +900,7 @@ void Game_two::Pause(Ref* pSender)
 	this->getParent()->visit();
 	renderTexture->end();
 
-	Director::getInstance()->pushScene(Gamepause::scene(renderTexture));
+	Director::getInstance()->pushScene(Pause::scene(renderTexture));
 }
 
 // 建造所需要的金币
@@ -1021,16 +1014,16 @@ void Game_two::onMouseDown(EventMouse* event)
 			switch (tower0Clicked)
 			{
 			case 0:
-				towerSprite = Button::create("tower_zero.png", "tower_zero.png");
+				towerSprite = Button::create("Tower_zero.png", "Tower_zero.png");
 				break;
 			case 1:
-				towerSprite = Button::create("tower_one.png", "tower_one.png");
+				towerSprite = Button::create("Tower_one.png", "Tower_one.png");
 				break;
 			case 2:
-				towerSprite = Button::create("tower_two.png", "tower_two.png");
+				towerSprite = Button::create("Tower_two.png", "Tower_two.png");
 				break;
 			case 3:
-				towerSprite = Button::create("tower_three.png", "tower_three.png");
+				towerSprite = Button::create("Tower_three.png", "Tower_three.png");
 				break;
 			default:
 				break;
@@ -1046,21 +1039,21 @@ void Game_two::onMouseDown(EventMouse* event)
 			this->addChild(towerSprite, 1, name1);
 
 			// 删除按钮
-			auto deletebutton = Button::create("delete.png");
+			auto deletebutton = Button::create("Delete.png");
 			sprintf(name2, "%d%d_d", int(mousePosition.x), int(mousePosition.y));
 			deletebutton->setPosition(Vec2(towerPosition.x + 10, towerPosition.y));
 			this->addChild(deletebutton, 2, name2);
 			deletebutton->setVisible(false);
 
 			// 升级按钮
-			auto levelupbutton = Button::create("levelup.png");
+			auto levelupbutton = Button::create("Upgrade.png");
 			sprintf(name3, "%d%d_u", int(mousePosition.x), int(mousePosition.y));
 			levelupbutton->setPosition(Vec2(towerPosition.x + 10, towerPosition.y + 10));
 			this->addChild(levelupbutton, 2, name3);
 			levelupbutton->setVisible(false);
 
 			// 退出按钮
-			auto returnbutton = Button::create("exit.png");
+			auto returnbutton = Button::create("Exit.png");
 			sprintf(name4, "%d%d_r", int(mousePosition.x), int(mousePosition.y));
 			returnbutton->setPosition(Vec2(towerPosition.x + 10, towerPosition.y - 10));
 			this->addChild(returnbutton, 2, name4);
@@ -1083,7 +1076,7 @@ void Game_two::onMouseDown(EventMouse* event)
 			this->addChild(towerlevel, 2, name6);
 
 			// 防御塔攻击范围
-			auto towerrange = Sprite::create("range.png");
+			auto towerrange = Sprite::create("Range.png");
 			towerrange->setVisible(false);
 			towerrange->setPosition(Vec2(towerPosition.x, towerPosition.y));
 			sprintf(name7, "%d%d_g", int(mousePosition.x), int(mousePosition.y));

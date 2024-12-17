@@ -5,15 +5,13 @@
 
 USING_NS_CC;
 
-class GameDefault : public cocos2d::Layer
+class Default : public cocos2d::Layer
 {
 public:
 	virtual bool init();
 	static cocos2d::Scene* scene(RenderTexture* sqr);
-	CREATE_FUNC(GameDefault);
-	// 重新开始
+	CREATE_FUNC(Default);
 	void RestartGame(Ref *pSender);
-	// 返回菜单
 	void ReturnMenuGame(Ref *pSender);
 };
 #endif 
